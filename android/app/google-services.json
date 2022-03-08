@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "555829620717",
+    "project_id": "mynjio",
+    "storage_bucket": "mynjio.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:555829620717:android:2a4cf0f02bfb8f2c0e41e4",
+        "android_client_info": {
+          "package_name": "com.example.mynjio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "555829620717-jpsp4tjrdaabm57414pnrb342t9q600n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPuMSnMXKa5Bo9s2ZKYkn4_x-yICOVBwg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "555829620717-jpsp4tjrdaabm57414pnrb342t9q600n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
