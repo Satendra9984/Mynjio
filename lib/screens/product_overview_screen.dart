@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mynjio/provider/productsProvider.dart';
 import 'package:mynjio/screens/cart_screen.dart';
 import 'package:mynjio/screens/products_grid.dart';
 import 'package:mynjio/widgets/appdrawer.dart';
@@ -16,6 +17,35 @@ class ProductOverviewScreen extends StatefulWidget {
 
 class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   bool showFavourite = false;
+  bool _isInit = false;
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    _isInit = true;
+
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    //this function calls after initState and before build function
+    if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+      Provider.of<ProductProvider>(context).fetchAndLoadData().then((value) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    }
+    setState(() {
+      _isInit = false;
+    });
+    // _isInit = false;
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,9 +91,13 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
           ),
         ],
       ),
-      body: ProductsGrid(
-        showFavourite: showFavourite,
-      ),
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : ProductsGrid(
+              showFavourite: showFavourite,
+            ),
     );
   }
 }
