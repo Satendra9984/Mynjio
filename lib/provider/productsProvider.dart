@@ -57,29 +57,64 @@ class ProductProvider with ChangeNotifier {
     return _items.firstWhere((element) => element.id == id);
   }
 
-  void addProduct(Product proj) {
-    final url = Uri.parse('gs://mynjio.appspot.com/products.json');
-    http.post(
-      url,
-      body: json.encode(
-        {
-          'title': proj.title,
-          'description': proj.description,
-          'price': proj.price,
-          'imageurl': proj.imageUrl,
+  Future<void> fetchAndLoadData() async {
+    final url = Uri.parse(
+        'https://mynjio-default-rtdb.asia-southeast1.firebasedatabase.app/products.json');
+    try {
+      final response = await http.get(url);
+      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      final List<Product> loadedProduct = [];
+      extractedData.forEach(
+        (key, value) {
+          loadedProduct.add(
+            Product(
+              id: key,
+              title: value['title'],
+              description: value['description'],
+              price: value['price'],
+              imageUrl: value['imageUrl'].toString(),
+            ),
+          );
         },
-      ),
-    );
+      );
+      _items = loadedProduct;
+      notifyListeners();
+      // print(extractedData);
+    } catch (error) {
+      rethrow;
+    }
+  }
 
-    final newProduct = Product(
-        id: proj.id,
-        title: proj.title,
-        description: proj.description,
-        price: proj.price,
-        imageUrl: proj.imageUrl);
+  Future<void> addProduct(Product proj) async {
+    final url = Uri.parse(
+        'https://mynjio-default-rtdb.asia-southeast1.firebasedatabase.app/products.json');
 
-    _items.add(newProduct);
-    notifyListeners();
+    try {
+      final response = await http.post(
+        url,
+        body: json.encode(
+          {
+            'title': proj.title,
+            'description': proj.description,
+            'price': proj.price,
+            'imageurl': proj.imageUrl,
+          },
+        ),
+      );
+      //   .then(
+      // (value) {
+      final newProduct = Product(
+          id: json.decode(response.body)['name'],
+          title: proj.title,
+          description: proj.description,
+          price: proj.price,
+          imageUrl: proj.imageUrl);
+
+      _items.add(newProduct);
+      notifyListeners();
+    } catch (error) {
+      rethrow;
+    }
   }
 
   void updateProduct(String id, Product newProduct) {
